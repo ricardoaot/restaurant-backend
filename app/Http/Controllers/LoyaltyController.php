@@ -23,7 +23,7 @@ class LoyaltyController extends Controller
         ]);
     }
 
-    public function store(Request $request)
+    public function storePoints(Request $request)
     {
         $validated = $request->validate([
             'email' => 'required|email',
