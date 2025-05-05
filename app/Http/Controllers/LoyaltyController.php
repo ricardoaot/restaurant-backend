@@ -54,4 +54,34 @@ class LoyaltyController extends Controller
 
         return response()->json($transactions);
     }
+
+    public function redeem(Request $request)
+    {
+        $validated = $request->validate([
+            'email' => 'required|email',
+            'points' => 'required|integer|min:1'
+        ]);
+
+        $record = LoyaltyPoint::where('email', $validated['email'])->first();
+
+        if (!$record || $record->points < $validated['points']) {
+            return response()->json(['message' => 'There are not enough points to redeem.'], 422);
+        }
+
+        // Subtract the points
+        $record->points -= $validated['points'];
+        $record->save();
+
+        // Record the transaction
+        LoyaltyTransaction::create([
+            'email' => $validated['email'],
+            'points' => $validated['points'],
+            'type' => 'redeem',
+        ]);
+
+        return response()->json([
+            'message' => 'Points redeemed successfully.',
+            'current_points' => $record->points
+        ]);
+    }
 }

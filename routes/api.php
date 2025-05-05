@@ -6,3 +6,4 @@ use App\Http\Controllers\LoyaltyController;
 Route::get('/loyalty-points', [LoyaltyController::class, 'getPoints']);
 Route::post('/loyalty-points', [LoyaltyController::class, 'storePoints']);
 Route::get('/loyalty-transactions/{email}', [LoyaltyController::class, 'getTransactions']);
+Route::post('/loyalty-redeem', [LoyaltyController::class, 'redeem']);
